@@ -1,14 +1,27 @@
 import { useState } from 'react'
-import { useTasks } from '../contexts/TaskContext'
+import { useTasks, type Task } from '../contexts/TaskContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { EmptyState, ThemeToggle } from '../components/UI'
 import { AddTaskModal, EditTaskModal } from '../components/Modal'
 import { TaskSection } from '../components/Task'
 
+interface newTaskType {
+  title: string;
+  description: string;
+  date: string;
+  completed: boolean;
+}
+
+interface UpdateTaskType {
+  title: string;
+  description: string;
+  date: string;
+}
+
 function StudyPlannerPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [taskToEdit, setTaskToEdit] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
   const {
     tasks,
     addTask,
@@ -27,17 +40,17 @@ function StudyPlannerPage() {
     setIsModalOpen(false)
   }
 
-  const handleAddNewTask = (newTask) => {
-    addTask(newTask)
+  const handleAddNewTask = (newTask: newTaskType) => {
+    addTask(newTask.title)
   }
 
-  const handleToggleComplete = (taskId) => {
+  const handleToggleComplete = (taskId: number) => {
     toggleTaskComplete(taskId)
   }
 
-  const handleEditTask = (taskId) => {
+  const handleEditTask = (taskId: number) => {
     const task = tasks.find(t => t.id === taskId)
-    setTaskToEdit(task)
+    setTaskToEdit(task!)
     setIsEditModalOpen(true)
   }
 
@@ -46,11 +59,11 @@ function StudyPlannerPage() {
     setTaskToEdit(null)
   }
 
-  const handleSaveEditTask = (taskId, updatedTask) => {
+  const handleSaveEditTask = (taskId: number, updatedTask: UpdateTaskType) => {
     editTask(taskId, updatedTask)
   }
 
-  const handleDeleteTask = (taskId) => {
+  const handleDeleteTask = (taskId: number) => {
     deleteTask(taskId)
   }
 
@@ -123,12 +136,13 @@ function StudyPlannerPage() {
         onAddTask={handleAddNewTask}
       />
       
-      <EditTaskModal 
+      {taskToEdit &&
+        <EditTaskModal 
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         onEditTask={handleSaveEditTask}
         task={taskToEdit}
-      />
+      />}
     </div>
   )
 }

@@ -1,7 +1,27 @@
 import { TaskItem } from '.'
 import { useTheme } from '../../contexts/ThemeContext'
 
-function TaskSection({ title, tasks, borderColor = 'gray-600', onToggleComplete, onEdit, onDelete }) {
+export interface Task {
+  id: number;
+  title: string;
+  completed: boolean;
+  description: string;
+  date: string;
+}
+
+
+
+interface TaskSectionProps {
+  title: string;
+  tasks: Task[];
+  borderColor: string;
+  onToggleComplete: (taskId: number) => void;
+  onEdit: (taskId: number) => void;
+  onDelete: (taskId: number) => void;
+
+}
+
+function TaskSection({ title, tasks, borderColor = 'gray-600', onToggleComplete, onEdit, onDelete }: TaskSectionProps) {
   const theme = useTheme()
   return (
     <div className="mb-6">

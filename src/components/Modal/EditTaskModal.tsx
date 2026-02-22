@@ -1,7 +1,24 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from '../../contexts/ThemeContext'
 
-function EditTaskModal({ isOpen, onClose, onEditTask, task }) {
+export interface OnEditTaskTypes {
+  title: string;
+  description: string;
+  date: string;
+}
+
+export interface TasksType extends OnEditTaskTypes {
+  id: number;
+}
+
+interface EditTaskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onEditTask: (taskId: number, editTasks: OnEditTaskTypes) => void;
+  task: TasksType;
+}
+
+function EditTaskModal({ isOpen, onClose, onEditTask, task }: EditTaskModalProps) {
   const theme = useTheme()
   const [taskTitle, setTaskTitle] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
@@ -19,7 +36,7 @@ function EditTaskModal({ isOpen, onClose, onEditTask, task }) {
     }
   }, [task])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (taskTitle.trim()) {
       onEditTask(task.id, {

@@ -1,7 +1,7 @@
 import AddTaskButton from './AddTaskButton'
 import { useTheme } from '../../contexts/ThemeContext'
 
-function EmptyState({ onAddTask }) {
+function EmptyState({ onAddTask }: { onAddTask:  () => void}) {
   const theme = useTheme()
   return (
     <div className="text-center py-8">

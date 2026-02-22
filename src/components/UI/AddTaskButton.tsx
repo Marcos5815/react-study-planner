@@ -1,4 +1,4 @@
-function AddTaskButton({ onClick }) {
+function AddTaskButton({ onClick }: {onClick: () => void}) {
   return (
     <button
       onClick={onClick}

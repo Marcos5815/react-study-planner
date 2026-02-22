@@ -1,13 +1,26 @@
 import { useState } from 'react'
 import { useTheme } from '../../contexts/ThemeContext'
 
-function AddTaskModal({ isOpen, onClose, onAddTask }) {
-  const theme = useTheme()
-  const [taskTitle, setTaskTitle] = useState('')
-  const [taskDescription, setTaskDescription] = useState('')
-  const [taskDate, setTaskDate] = useState(new Date().toISOString().split('T')[0])
+interface OnAddTaskType {
+  title: string;
+  description: string;
+  date: string;
+  completed: boolean;
+}
 
-  const handleSubmit = (e) => {
+interface AddTaskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddTask: (task: OnAddTaskType) => void;
+}
+
+function AddTaskModal({ isOpen, onClose, onAddTask }: AddTaskModalProps) {
+  const theme = useTheme()
+  const [taskTitle, setTaskTitle] = useState<string>('')
+  const [taskDescription, setTaskDescription] = useState<string>('')
+  const [taskDate, setTaskDate] = useState<string>(new Date().toISOString().split('T')[0])
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (taskTitle.trim()) {
       onAddTask({

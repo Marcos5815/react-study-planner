@@ -1,6 +1,22 @@
 import { useTheme } from '../../contexts/ThemeContext'
 
-function TaskItem({ task, onToggleComplete, onEdit, onDelete }) {
+export interface Task {
+  id: number;
+  title: string;
+  completed: boolean;
+  description: string;
+  date: string;
+}
+
+
+interface TaskItemProps {
+  task: Task;
+  onToggleComplete: (taskId: number) => void;
+  onEdit: (taskId: number) => void;
+  onDelete: (taskId: number) => void;
+}
+
+function TaskItem({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) {
   const theme = useTheme()
   const handleToggle = () => {
     onToggleComplete(task.id)

@@ -1,8 +1,23 @@
 import { createContext, useContext, useState } from 'react'
 
-const ThemeContext = createContext()
+interface ThemeContextType {
+  toggleTheme: () => void;
+  isDark: boolean;
+  background: string;
+  backgroundColor: string;
+  cardBg: string;
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  inputBg: string;
+  inputBorder: string;
+  dividerColor: string;
+  dividerPurple: string;
+}
 
-export function ThemeProvider({ children }) {
+const ThemeContext = createContext<ThemeContextType | null>(null)
+
+export function ThemeProvider({ children }: {children: React.ReactNode}) {
   const [isDarkTheme, setIsDarkTheme] = useState(true)
 
   const toggleTheme = () => {
@@ -39,7 +54,7 @@ export function ThemeProvider({ children }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext)
-  if (context === undefined) {
+  if (context === undefined || !context) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
   return context
