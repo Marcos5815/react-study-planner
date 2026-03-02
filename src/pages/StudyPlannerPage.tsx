@@ -1,9 +1,19 @@
 import { useState } from 'react'
-import { useTasks, type Task } from '../contexts/TaskContext'
-import { useTheme } from '../contexts/ThemeContext'
+import { selectTheme } from '../store/slices/themeSlice';
 import { EmptyState, ThemeToggle } from '../components/UI'
 import { AddTaskModal, EditTaskModal } from '../components/Modal'
 import { TaskSection } from '../components/Task'
+import { useDispatch, useSelector } from 'react-redux'
+import { 
+  selectCompletedTasks, 
+  selectPendingTasks, 
+  selectTasks, 
+  addTask, 
+  toggleTaskComplete, 
+  editTask, 
+  deleteTask,
+  type Task
+} from '../store/slices/taskSlice'
 
 interface newTaskType {
   title: string;
@@ -19,18 +29,14 @@ interface UpdateTaskType {
 }
 
 function StudyPlannerPage() {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
-  const {
-    tasks,
-    addTask,
-    toggleTaskComplete,
-    editTask,
-    deleteTask,
-    getPendingTasks,
-    getCompletedTasks
-  } = useTasks()
+  const tasks = useSelector(selectTasks);
+  const pendingTasks = useSelector(selectPendingTasks)
+  const completedTasks = useSelector(selectCompletedTasks)
+  const theme = useSelector(selectTheme)
 
   const handleAddTask = () => {
     setIsModalOpen(true)
@@ -41,11 +47,11 @@ function StudyPlannerPage() {
   }
 
   const handleAddNewTask = (newTask: newTaskType) => {
-    addTask(newTask.title)
+    dispatch(addTask(newTask))
   }
 
   const handleToggleComplete = (taskId: number) => {
-    toggleTaskComplete(taskId)
+    dispatch(toggleTaskComplete(taskId))
   }
 
   const handleEditTask = (taskId: number) => {
@@ -60,16 +66,12 @@ function StudyPlannerPage() {
   }
 
   const handleSaveEditTask = (taskId: number, updatedTask: UpdateTaskType) => {
-    editTask(taskId, updatedTask)
+    dispatch(editTask({ taskId, updatedTask }))
   }
 
   const handleDeleteTask = (taskId: number) => {
-    deleteTask(taskId)
+    dispatch(deleteTask(taskId))
   }
-
-  const pendingTasks = getPendingTasks()
-  const completedTasks = getCompletedTasks()
-  const theme = useTheme()
 
   return (
     <div 

@@ -1,5 +1,5 @@
-import { useTheme } from '../../contexts/ThemeContext'
-
+import { useSelector } from 'react-redux';
+import { selectTheme } from '../../store/slices/themeSlice';
 export interface Task {
   id: number;
   title: string;
@@ -17,7 +17,7 @@ interface TaskItemProps {
 }
 
 function TaskItem({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) {
-  const theme = useTheme()
+  const theme = useSelector(selectTheme)
   const handleToggle = () => {
     onToggleComplete(task.id)
   }

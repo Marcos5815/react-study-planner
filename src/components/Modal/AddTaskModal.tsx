@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useTheme } from '../../contexts/ThemeContext'
-
+import { useSelector } from 'react-redux';
+import { selectTheme } from '../../store/slices/themeSlice';
 interface OnAddTaskType {
   title: string;
   description: string;
@@ -15,7 +15,7 @@ interface AddTaskModalProps {
 }
 
 function AddTaskModal({ isOpen, onClose, onAddTask }: AddTaskModalProps) {
-  const theme = useTheme()
+  const theme = useSelector(selectTheme)
   const [taskTitle, setTaskTitle] = useState<string>('')
   const [taskDescription, setTaskDescription] = useState<string>('')
   const [taskDate, setTaskDate] = useState<string>(new Date().toISOString().split('T')[0])
@@ -27,7 +27,7 @@ function AddTaskModal({ isOpen, onClose, onAddTask }: AddTaskModalProps) {
         title: taskTitle.trim(),
         description: taskDescription.trim(),
         date: new Date(taskDate + 'T00:00:00').toLocaleDateString('pt-BR'),
-        completed: false
+        completed: false,
       })
       setTaskTitle('')
       setTaskDescription('')
@@ -78,7 +78,8 @@ function AddTaskModal({ isOpen, onClose, onAddTask }: AddTaskModalProps) {
             <input
               type="date"
               value={taskDate}
-              onChange={(e) => setTaskDate(e.target.value)}
+              onChange={(e) => {
+                setTaskDate(e.target.value)}}
               className={`w-full px-3 py-2 ${theme.inputBg} ${theme.textPrimary} rounded-lg border ${theme.inputBorder} focus:border-purple-header focus:outline-none`}
             />
           </div>
